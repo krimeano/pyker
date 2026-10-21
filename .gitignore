@@ -1,0 +1,24 @@
+.idea/
+*.iml
+*.iws
+out/
+target/
+*.class
+*.log
+*.jar
+*.war
+*.ear
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.project
+.settings/
+.buildpath
+.classpath
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/

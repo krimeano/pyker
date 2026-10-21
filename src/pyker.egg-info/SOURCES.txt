@@ -1,0 +1,14 @@
+README.md
+pyproject.toml
+src/pyker/__init__.py
+src/pyker/main.py
+src/pyker.egg-info/PKG-INFO
+src/pyker.egg-info/SOURCES.txt
+src/pyker.egg-info/dependency_links.txt
+src/pyker.egg-info/requires.txt
+src/pyker.egg-info/top_level.txt
+src/pyker/ipsum/__init__.py
+src/pyker/ipsum/dolor.py
+src/pyker/lorem/__init__.py
+tests/test_main.py
+tests/test_packages.py

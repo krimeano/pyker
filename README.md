@@ -1,0 +1,24 @@
+# pyker
+
+Basic Python 3 project scaffold with `src` layout and `pytest` tests.
+
+## Project structure
+
+- `src/pyker/main.py` - main entry module
+- `src/pyker/lorem/` - `lorem` package
+- `src/pyker/ipsum/` - `ipsum` package
+- `src/pyker/ipsum/dolor.py` - `ipsum.dolor` module
+- `tests/` - pytest tests
+
+## Why use `python -m ...`
+
+Use module execution (`python -m pyker.main`) as the default.
+It runs code in package context, so package imports are stable when the project grows.
+
+## Quick start
+
+```zsh
+/Users/palutser/IdeaProjects/pyker/.venv/bin/python -m pip install -e ".[dev]"
+/Users/palutser/IdeaProjects/pyker/.venv/bin/python -m pyker.main
+/Users/palutser/IdeaProjects/pyker/.venv/bin/python -m pytest
+```
