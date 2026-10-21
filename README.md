@@ -32,3 +32,27 @@ It runs code in package context, so package imports are stable when the project 
 /Users/palutser/IdeaProjects/pyker/.venv/bin/python -m pyker.main
 /Users/palutser/IdeaProjects/pyker/.venv/bin/python -m pytest
 ```
+
+## Card model
+
+`Card` is a tuple-like type with shape `(rank_index, suit_index)`.
+
+- `SUITS = ('s', 'd', 'c', 'h')`
+- `RANKS = ('A', 'K', 'Q', 'J', 'T', '9', ..., '2')`
+- `index = rank_index * 4 + suit_index`
+
+Examples:
+
+- `Card.from_index(0)` -> `(0, 0)` -> `"As"`
+- `Card.from_index(6)` -> `(1, 2)` -> `"Kc"`
+- `int(Card.from_str("2h"))` -> `51`
+
+## Deck model
+
+`Deck` models a 52-card deck without jokers for hold'em-style dealing.
+
+- Default order (`reset` / new deck) is NDO and matches card indexes: `As ... 2h`
+- `shuffle()` always shuffles the full deck and resets draw position
+- `get_card()` draws one card from the top
+- `get_cards(n)` draws `n` cards; raises `IndexError` if there are not enough cards
+- `burn()` discards one top card; raises `IndexError` if the deck is empty
