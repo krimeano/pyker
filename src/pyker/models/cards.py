@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import random
+from collections.abc import Iterable, Iterator, Sequence
 from typing import Final, cast
 
 SUITS: Final[tuple[str, ...]] = ("s", "d", "c", "h")
@@ -96,6 +97,53 @@ class Card(tuple[int, int]):
             raise ValueError(f"Unknown suit: {suit}")
 
         return cls(_RANK_TO_INDEX[rank], _SUIT_TO_INDEX[suit])
+
+
+class Hand:
+    """Ordered set of cards used for pocket and table collections."""
+
+    __slots__ = ("_cards",)
+
+    def __init__(self, cards: Iterable[Card] | None = None) -> None:
+        self._cards: list[Card] = list(cards) if cards is not None else []
+
+    def __iter__(self) -> Iterator[Card]:
+        return iter(self._cards)
+
+    def __getitem__(self, index: int) -> Card:
+        return self._cards[index]
+
+    def __len__(self) -> int:
+        return len(self._cards)
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}({self._cards!r})"
+
+    @property
+    def cards(self) -> list[Card]:
+        return list(self._cards)
+
+    def add_card(self, card: Card) -> None:
+        self._cards.append(card)
+
+    def add_cards(self, cards: Iterable[Card]) -> None:
+        self._cards.extend(cards)
+
+    def __add__(self, other: Hand | Sequence[Card]) -> Hand:
+        if isinstance(other, Hand):
+            right = other._cards
+        else:
+            right = list(other)
+        return Hand([*self._cards, *right])
+
+
+class Pocket(Hand):
+    """Player pocket cards."""
+
+
+class Table(Hand):
+    """Community cards on the table."""
+
 
 
 class Deck:

@@ -56,3 +56,17 @@ Examples:
 - `get_card()` draws one card from the top
 - `get_cards(n)` draws `n` cards; raises `IndexError` if there are not enough cards
 - `burn()` discards one top card; raises `IndexError` if the deck is empty
+
+## Hand, Pocket, Table
+
+`Hand` is an ordered container over `Card` values.
+
+- `len(hand)` returns card count
+- `add_card(card)` appends one card
+- `add_cards(cards)` appends many cards preserving order
+- `hand_a + hand_b` returns a new combined `Hand`
+
+`Pocket` and `Table` are lightweight `Hand` specializations.
+
+- `Pocket + Table` returns `Hand`
+- `Table + deck.get_cards(3)` returns a new `Hand`

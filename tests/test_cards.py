@@ -1,6 +1,6 @@
 import pytest
 
-from pyker.models import Card, DECK_SIZE
+from pyker.models import Card, DECK_SIZE, Deck, Hand, Pocket, Table
 
 
 def test_index_to_tuple_and_string_examples() -> None:
@@ -41,3 +41,47 @@ def test_invalid_inputs_raise_value_error() -> None:
         Card.from_str("10h")
     with pytest.raises(ValueError):
         Card.from_str("Ax")
+
+
+def test_hand_supports_len_and_add_methods() -> None:
+    hand = Hand()
+    assert len(hand) == 0
+
+    hand.add_card(Card.from_str("As"))
+    hand.add_cards([Card.from_str("Kd"), Card.from_str("Qc")])
+
+    assert len(hand) == 3
+    assert [str(card) for card in hand] == ["As", "Kd", "Qc"]
+
+
+def test_hand_add_combines_pocket_and_table() -> None:
+    pocket = Pocket([Card.from_str("As"), Card.from_str("Ah")])
+    table = Table([Card.from_str("Kd"), Card.from_str("Qc"), Card.from_str("Jc")])
+
+    full_hand = pocket + table
+
+    assert isinstance(full_hand, Hand)
+    assert [str(card) for card in full_hand] == ["As", "Ah", "Kd", "Qc", "Jc"]
+
+
+def test_table_add_with_list_returns_hand() -> None:
+    deck = Deck()
+    table = Table()
+
+    flop = deck.get_cards(3)
+    new_table = table + flop
+
+    assert isinstance(new_table, Hand)
+    assert not isinstance(new_table, Table)
+    assert [str(card) for card in new_table] == ["As", "Ad", "Ac"]
+
+
+def test_table_add_cards_with_deck_result_keeps_order() -> None:
+    deck = Deck()
+    table = Table()
+
+    table.add_cards(deck.get_cards(3))
+    table.add_cards(deck.get_cards(1))
+    table.add_cards(deck.get_cards(1))
+
+    assert [str(card) for card in table] == ["As", "Ad", "Ac", "Ah", "Ks"]
