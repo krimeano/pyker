@@ -1,3 +1,3 @@
 """Top-level package for pyker."""
 
-__all__ = ["main", "models", "cache"]
+__all__ = ["main", "models", "cache", "combinatorics"]
