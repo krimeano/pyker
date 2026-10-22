@@ -1,3 +1,5 @@
+import itertools
+
 import pytest
 
 from pyker.models import Card, DECK_SIZE, Deck, Hand, Pocket, Table
@@ -130,3 +132,15 @@ def test_hand_number_is_order_independent_and_uses_sorted_indexes() -> None:
     expected = 3 + 20825  # C(3,2) + C(51,3); C(0,1) is skipped
     assert hand_unsorted.number() == expected
     assert hand_sorted.number() == expected
+
+
+def test_hand_number_is_bijective_for_five_cards_from_ten_indexes() -> None:
+    values: list[int] = []
+
+    for indexes in itertools.combinations(range(10), 5):
+        hand = Hand(Card.from_index(i) for i in indexes)
+        values.append(hand.number())
+
+    assert len(values) == 252
+    assert len(set(values)) == 252
+    assert set(values) == set(range(252))
