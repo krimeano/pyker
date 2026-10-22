@@ -15,7 +15,11 @@ def binary_coefficient(n: int, k: int) -> int:
     if n == 0 or k == 0 or k == n:
         return 1
 
-    if k > n / 2:
-        k = n - k  # Use symmetry property
+    # Use symmetry to minimize the number of multiplication/division steps.
+    if k > n // 2:
+        k = n - k
 
-    return binary_coefficient(n, k - 1) * (n - k + 1) // k
+    result = 1
+    for i in range(1, k + 1):
+        result = result * (n - k + i) // i
+    return result
