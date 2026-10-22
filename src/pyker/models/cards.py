@@ -6,6 +6,8 @@ import random
 from collections.abc import Iterable, Iterator, Sequence
 from typing import Final, cast
 
+from pyker.combinatorics import binary_coefficient
+
 SUITS: Final[tuple[str, ...]] = ("s", "d", "c", "h")
 RANKS: Final[tuple[str, ...]] = (
     "A",
@@ -147,6 +149,16 @@ class Hand:
         combined_size = len(self._cards) + len(right)
         self._ensure_supported_size(combined_size)
         return Hand([*self._cards, *right])
+
+    def number(self) -> int:
+        """Return combinatorial rank of the hand based on sorted card indexes."""
+        sorted_cards = sorted(self._cards, key=int)
+
+        value = 0
+        for ix, card in enumerate(sorted_cards):
+            card_index = int(card)
+            value += binary_coefficient(card_index, ix)
+        return value
 
 
 class Pocket(Hand):

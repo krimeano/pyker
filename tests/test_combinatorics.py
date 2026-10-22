@@ -2,7 +2,8 @@ import math
 
 import pytest
 
-from pyker.combinatorics import MAX_BINOMIAL_K, MAX_BINOMIAL_N, binary_coefficient, get_binomial_table
+import pyker.combinatorics as combinatorics
+from pyker.combinatorics import binary_coefficient
 
 
 @pytest.mark.parametrize(
@@ -44,20 +45,19 @@ def test_binary_coefficient_invalid_inputs_raise_value_error(n: int, k: int, mes
         binary_coefficient(n, k)
 
 
-def test_binomial_table_domain_and_values() -> None:
-    table = get_binomial_table()
+def test_binary_coefficient_is_cached_on_demand() -> None:
+    combinatorics._BINOMIAL_CACHE.clear()
 
-    expected_size = sum(min(MAX_BINOMIAL_K, n) + 1 for n in range(MAX_BINOMIAL_N + 1))
-    assert len(table) == expected_size
+    assert binary_coefficient(51, 2) == 1275
+    assert (51, 2) in combinatorics._BINOMIAL_CACHE
 
-    for n in range(MAX_BINOMIAL_N + 1):
-        for k in range(min(MAX_BINOMIAL_K, n) + 1):
-            assert table[(n, k)] == binary_coefficient(n, k)
-
-    assert (MAX_BINOMIAL_N, MAX_BINOMIAL_K + 1) not in table
+    cache_size = len(combinatorics._BINOMIAL_CACHE)
+    assert binary_coefficient(51, 2) == 1275
+    assert len(combinatorics._BINOMIAL_CACHE) == cache_size
 
 
-def test_binomial_table_is_cached() -> None:
-    first = get_binomial_table()
-    second = get_binomial_table()
-    assert first is second
+def test_binary_coefficient_cache_uses_normalized_k() -> None:
+    combinatorics._BINOMIAL_CACHE.clear()
+
+    assert binary_coefficient(10, 8) == 45
+    assert (10, 2) in combinatorics._BINOMIAL_CACHE

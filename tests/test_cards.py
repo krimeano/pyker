@@ -117,3 +117,16 @@ def test_hand_add_operator_more_than_seven_cards_raises_not_implemented() -> Non
 
     with pytest.raises(NotImplementedError):
         _ = left + right
+
+
+def test_hand_number_empty_hand_is_zero() -> None:
+    assert Hand().number() == 0
+
+
+def test_hand_number_is_order_independent_and_uses_sorted_indexes() -> None:
+    hand_unsorted = Hand([Card.from_str("2h"), Card.from_str("Ah"), Card.from_str("As")])
+    hand_sorted = Hand([Card.from_str("As"), Card.from_str("Ah"), Card.from_str("2h")])
+
+    expected = 1 + 3 + 1275  # C(0,0) + C(3,1) + C(51,2)
+    assert hand_unsorted.number() == expected
+    assert hand_sorted.number() == expected
