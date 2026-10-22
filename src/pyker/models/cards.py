@@ -157,7 +157,9 @@ class Hand:
         value = 0
         for ix, card in enumerate(sorted_cards):
             card_index = int(card)
-            value += binary_coefficient(card_index, ix)
+            if card_index <= ix:
+                continue
+            value += binary_coefficient(card_index, ix + 1)
         return value
 
 
@@ -167,7 +169,6 @@ class Pocket(Hand):
 
 class Table(Hand):
     """Community cards on the table."""
-
 
 
 class Deck:
