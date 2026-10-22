@@ -26,6 +26,7 @@ RANKS: Final[tuple[str, ...]] = (
 SUIT_COUNT: Final[int] = len(SUITS)
 RANK_COUNT: Final[int] = len(RANKS)
 DECK_SIZE: Final[int] = SUIT_COUNT * RANK_COUNT
+HAND_MAX_CARDS: Final[int] = 7
 
 _SUIT_TO_INDEX: Final[dict[str, int]] = {name: ix for ix, name in enumerate(SUITS)}
 _RANK_TO_INDEX: Final[dict[str, int]] = {name: ix for ix, name in enumerate(RANKS)}
@@ -106,6 +107,12 @@ class Hand:
 
     def __init__(self, cards: Iterable[Card] | None = None) -> None:
         self._cards: list[Card] = list(cards) if cards is not None else []
+        self._ensure_supported_size(len(self._cards))
+
+    @staticmethod
+    def _ensure_supported_size(size: int) -> None:
+        if size > HAND_MAX_CARDS:
+            raise NotImplementedError(f"Hand size > {HAND_MAX_CARDS} is not implemented")
 
     def __iter__(self) -> Iterator[Card]:
         return iter(self._cards)
@@ -124,16 +131,21 @@ class Hand:
         return list(self._cards)
 
     def add_card(self, card: Card) -> None:
+        self._ensure_supported_size(len(self._cards) + 1)
         self._cards.append(card)
 
     def add_cards(self, cards: Iterable[Card]) -> None:
-        self._cards.extend(cards)
+        right = list(cards)
+        self._ensure_supported_size(len(self._cards) + len(right))
+        self._cards.extend(right)
 
     def __add__(self, other: Hand | Sequence[Card]) -> Hand:
         if isinstance(other, Hand):
             right = other._cards
         else:
             right = list(other)
+        combined_size = len(self._cards) + len(right)
+        self._ensure_supported_size(combined_size)
         return Hand([*self._cards, *right])
 
 

@@ -85,3 +85,35 @@ def test_table_add_cards_with_deck_result_keeps_order() -> None:
     table.add_cards(deck.get_cards(1))
 
     assert [str(card) for card in table] == ["As", "Ad", "Ac", "Ah", "Ks"]
+
+
+def test_hand_init_more_than_seven_cards_raises_not_implemented() -> None:
+    deck = Deck()
+
+    with pytest.raises(NotImplementedError):
+        Hand(deck.get_cards(8))
+
+
+def test_hand_add_card_more_than_seven_cards_raises_not_implemented() -> None:
+    deck = Deck()
+    hand = Hand(deck.get_cards(7))
+
+    with pytest.raises(NotImplementedError):
+        hand.add_card(deck.get_card())
+
+
+def test_hand_add_cards_more_than_seven_cards_raises_not_implemented() -> None:
+    deck = Deck()
+    hand = Hand(deck.get_cards(6))
+
+    with pytest.raises(NotImplementedError):
+        hand.add_cards(deck.get_cards(2))
+
+
+def test_hand_add_operator_more_than_seven_cards_raises_not_implemented() -> None:
+    deck = Deck()
+    left = Pocket(deck.get_cards(4))
+    right = Table(deck.get_cards(4))
+
+    with pytest.raises(NotImplementedError):
+        _ = left + right
