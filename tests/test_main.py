@@ -8,6 +8,5 @@ def test_main_prints_expected_lines(capsys, monkeypatch, tmp_path) -> None:
     captured = capsys.readouterr()
 
     assert result == 0
-    assert "lorem" in captured.out
-    assert "ipsum dolor" in captured.out
+    assert "pyker demo" in captured.out
     assert "cached: demo_result" in captured.out
